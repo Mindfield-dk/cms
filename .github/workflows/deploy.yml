@@ -13,10 +13,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -39,3 +39,4 @@ jobs:
           SANITY_TOKEN: ${{ secrets.SANITY_TOKEN }}
         run: |
           SANITY_AUTH_TOKEN=${{ secrets.SANITY_TOKEN }} sanity deploy
+          echo 'Success! Studio deployed to [https://mindfield.sanity.studio](https://mindfield.sanity.studio)' >> $GITHUB_STEP_SUMMARY
