@@ -2,6 +2,12 @@ name: Deploy Sanity Project
 run-name: Deploy Sanity Project
 
 on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        description: environment
+        type: string 
   workflow_call:
     inputs:
       environment:
