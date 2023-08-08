@@ -1,0 +1,35 @@
+name: Deploy[stage]
+on:
+  workflow_dispatch:
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Sanity CLI
+        run: npm install -g @sanity/cli
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+  build:
+    uses: ./.github/workflows/deploy.yml
+    if: ${{ github.event.inputs.environment != 'development' }}
+    with:
+      env: "${{ github.event.inputs.environment }}"
+
+      
