@@ -1,4 +1,5 @@
 name: Deploy Sanity Project
+run-name: Deploy Sanity Project
 
 on:
   push:
@@ -14,6 +15,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install Sanity CLI
         run: npm install -g @sanity/cli
 
@@ -28,4 +37,5 @@ jobs:
           SANITY_PROJECT_ID: ${{ vars.SANITY_PROJECT_ID }}
           SANITY_DATASET: ${{ vars.SANITY_DATASET }}
           SANITY_TOKEN: ${{ secrets.SANITY_TOKEN }}
-        run: sanity deploy
+        run: |
+          SANITY_AUTH_TOKEN=${{ secrets.SANITY_TOKEN }} sanity deploy
