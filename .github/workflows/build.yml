@@ -34,11 +34,20 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Deploy
-        uses: ./.github/workflows/deploy.yml
-        with:
-          environment: "development"
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Trigger CMS Deploy
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            ORG: mindfield-dk
+            REPO: cms
+            WORKFLOW: deploy.yml
+            ENVIRONMENT: production # should be development but this env is not created yet
+        run: |
+            curl -X POST \
+                -H "Accept: application/vnd.github.v3+json" \
+                -H "Authorization: Bearer $GITHUB_TOKEN" \
+                https://api.github.com/repos/$ORG/$REPO/actions/workflows/$WORKFLOW/dispatches \
+                -d '{"ref":"main", "inputs": {"environment": "'"$ENVIRONMENT"'"}}'
+
 
 
      
