@@ -1,5 +1,5 @@
-name: Deploy Sanity Project
-run-name: Deploy Sanity Project
+name: Deploy
+run-name: "Deploy to: ${{ inputs.environment }}"
 
 on:
   workflow_dispatch:
@@ -8,15 +8,10 @@ on:
         required: true
         description: environment
         type: string 
-  workflow_call:
-    inputs:
-      environment:
-        required: true
-        description: environment
-        type: string
 
 jobs:
   deploy:
+    name: "Deploy to: ${{ inputs.environment }}"
     runs-on: ubuntu-latest
     environment: "${{ inputs.environment }}"
 
