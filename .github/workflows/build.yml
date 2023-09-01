@@ -38,8 +38,6 @@ jobs:
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             REPOSITORY: ${{ github.repository }}
-            # ORG: mindfield-dk
-            # REPO: cms
             WORKFLOW: deploy.yml
             ENVIRONMENT: production # should be development but this env is not created yet
         run: |
